@@ -5,38 +5,31 @@ import {
   UpdateDateColumn,
   CreateDateColumn,
 } from 'typeorm';
+
 /**
- * user用户表
+ * post新建主题表
  */
 
 @Entity()
-export class User {
+export class Post {
   @PrimaryGeneratedColumn('uuid')
   id: number;
 
   @Column()
-  name: string;
+  title: string;
+
+  @Column({ nullable: true })
+  content: string;
 
   @Column()
-  email: string;
+  user_id: number;
 
-  @Column({ default: true })
-  isActive: boolean;
-
-  @Column()
-  password: string;
-
-  @Column({
-    nullable: true,
-  })
-  address: string;
+  @Column({ nullable: true })
+  reply_id: number;
 
   @CreateDateColumn()
   time: string;
 
   @UpdateDateColumn()
   update_time: string;
-
-  @Column({ nullable: true })
-  sex: string;
 }
