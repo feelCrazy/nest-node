@@ -4,7 +4,11 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   CreateDateColumn,
+  OneToMany,
 } from 'typeorm';
+
+import { Post } from '../../post/entities/post.entity';
+
 /**
  * user用户表
  */
@@ -12,7 +16,7 @@ import {
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
-  id: number;
+  id: string;
 
   @Column()
   name: string;
@@ -39,4 +43,7 @@ export class User {
 
   @Column({ nullable: true })
   sex: string;
+
+  @OneToMany(() => Post, (post) => post)
+  posts: Post[];
 }

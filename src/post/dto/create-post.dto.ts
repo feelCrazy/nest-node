@@ -1,6 +1,7 @@
-import { IsOptional, IsNotEmpty, IsString, IsNumber } from 'class-validator';
+import { IsOptional, IsNotEmpty, IsString } from 'class-validator';
+import { UserDTO } from '../../user/dto/user.dto';
 export class CreatePostDto {
-  id: number;
+  id: string;
 
   @IsNotEmpty()
   @IsString()
@@ -11,8 +12,7 @@ export class CreatePostDto {
   content: string;
 
   @IsNotEmpty()
-  @IsNumber()
-  user_id: number;
+  user_id: string;
 
   @IsOptional()
   @IsNotEmpty()
@@ -23,4 +23,7 @@ export class CreatePostDto {
 
   @IsOptional()
   update_time: string;
+
+  @IsOptional()
+  user: UserDTO;
 }

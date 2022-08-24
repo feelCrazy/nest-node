@@ -1,19 +1,34 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { Post } from './entities/post.entity';
+import { User } from '../user/entity/user.entity';
 
 @Injectable()
 export class PostService {
-  create(createPostDto: CreatePostDto) {
-    return 'This action adds a new post';
-  }
+  constructor(
+    @InjectRepository(Post)
+    private postRepository: Repository<Post>,
+
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
+  ) {}
 
   findAll() {
     return `This action returns all post`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} post`;
+  async findOne(id: string) {
+    return await this.postRepository.find({
+      relations: {
+        user: true,
+      },
+      where: {
+        id,
+      },
+    });
   }
 
   update(id: number, updatePostDto: UpdatePostDto) {
@@ -22,5 +37,11 @@ export class PostService {
 
   remove(id: number) {
     return `This action removes a #${id} post`;
+  }
+
+  async createPost(params: CreatePostDto): Promise<CreatePostDto> {
+    // 建立表关系
+    params.user = await this.userRepository.findOneBy({ id: params.user_id });
+    return await this.postRepository.save(params);
   }
 }

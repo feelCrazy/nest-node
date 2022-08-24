@@ -4,7 +4,9 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   CreateDateColumn,
+  ManyToOne,
 } from 'typeorm';
+import { User } from '../../user/entity/user.entity';
 
 /**
  * post新建主题表
@@ -13,7 +15,7 @@ import {
 @Entity()
 export class Post {
   @PrimaryGeneratedColumn('uuid')
-  id: number;
+  id: string;
 
   @Column()
   title: string;
@@ -22,14 +24,17 @@ export class Post {
   content: string;
 
   @Column()
-  user_id: number;
+  user_id: string;
 
   @Column({ nullable: true })
-  reply_id: number;
+  reply_id: string;
 
   @CreateDateColumn()
   time: string;
 
   @UpdateDateColumn()
   update_time: string;
+
+  @ManyToOne(() => User, (user) => user.id)
+  user: User;
 }

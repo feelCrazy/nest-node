@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entity/user.entity';
 import { IUsers } from './interfaces/user.interface';
+
 @Injectable()
 export class UserService {
   constructor(
@@ -14,7 +15,7 @@ export class UserService {
     return this.useRepository.find();
   }
 
-  findOne(id: number): Promise<User> {
+  findOne(id: string): Promise<User> {
     return this.useRepository.findOneBy({ id });
   }
 
@@ -24,5 +25,16 @@ export class UserService {
 
   async create(user: IUsers): Promise<IUsers> {
     return await this.useRepository.save(user);
+  }
+
+  async findUser(id: string) {
+    return await this.useRepository.find({
+      relations: {
+        posts: true,
+      },
+      where: {
+        id,
+      },
+    });
   }
 }

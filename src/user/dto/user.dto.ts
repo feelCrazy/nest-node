@@ -10,7 +10,7 @@ import {
 } from 'class-validator';
 
 export class UserDTO {
-  readonly id: number;
+  readonly id: string;
 
   @IsNotEmpty()
   @MaxLength(20)
@@ -27,10 +27,6 @@ export class UserDTO {
   @IsBoolean()
   @IsOptional()
   isActive: boolean;
-
-  @IsNumber()
-  @IsOptional()
-  age: number;
 
   @IsString()
   @IsOptional()

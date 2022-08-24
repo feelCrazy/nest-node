@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Res, Body, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Res,
+  Body,
+  HttpStatus,
+  Param,
+} from '@nestjs/common';
 import { Response } from 'express';
 
 import { UserService } from './user.service';
@@ -25,5 +33,12 @@ export class UserController {
       message: 'User Updated successfully!',
       status: 200,
     });
+  }
+
+  @Get(':id')
+  async findUser(@Param('id') id) {
+    console.log('>>>id', id);
+
+    return await this.userService.findUser(id);
   }
 }
