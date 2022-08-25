@@ -11,30 +11,25 @@ export class UserService {
     private useRepository: Repository<User>,
   ) {}
 
-  finAll(): Promise<IUsers[]> {
-    return this.useRepository.find();
+  async finAll(): Promise<IUsers[]> {
+    return await this.useRepository.find();
   }
 
-  findOne(id: string): Promise<User> {
-    return this.useRepository.findOneBy({ id });
+  async findActive(): Promise<IUsers[]> {
+    return await this.useRepository.find({ where: { isActive: true } });
   }
 
-  async removeOne(id: number): Promise<void> {
-    await this.useRepository.delete(id);
+  async findOne(id: string): Promise<User> {
+    return await this.useRepository.findOneBy({ id });
+  }
+
+  async removeOne(id: string): Promise<User> {
+    const user = await this.useRepository.findOneBy({ id });
+    user.isActive = false;
+    return await this.useRepository.save(user);
   }
 
   async create(user: IUsers): Promise<IUsers> {
     return await this.useRepository.save(user);
-  }
-
-  async findUser(id: string) {
-    return await this.useRepository.find({
-      relations: {
-        posts: true,
-      },
-      where: {
-        id,
-      },
-    });
   }
 }

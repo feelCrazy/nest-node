@@ -24,10 +24,10 @@ export class User {
   @Column()
   email: string;
 
-  @Column({ default: true })
+  @Column({ default: true, select: false })
   isActive: boolean;
 
-  @Column()
+  @Column({ select: false })
   password: string;
 
   @Column({

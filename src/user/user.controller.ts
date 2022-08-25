@@ -6,8 +6,9 @@ import {
   Body,
   HttpStatus,
   Param,
+  Req,
 } from '@nestjs/common';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 
 import { UserService } from './user.service';
 import { UserDTO } from './dto/user.dto';
@@ -35,10 +36,19 @@ export class UserController {
     });
   }
 
-  @Get(':id')
-  async findUser(@Param('id') id) {
-    console.log('>>>id', id);
+  @Get('remove')
+  async removeOne(@Req() req: Request) {
+    const id = req.query.id as string;
+    return await this.userService.removeOne(id);
+  }
 
-    return await this.userService.findUser(id);
+  @Get('findActive')
+  async findActive() {
+    return await this.userService.findActive();
+  }
+
+  @Get(':id')
+  async findOne(@Param('id') id) {
+    return await this.userService.findOne(id);
   }
 }
