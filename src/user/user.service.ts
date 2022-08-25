@@ -16,7 +16,12 @@ export class UserService {
   }
 
   async findActive(): Promise<IUsers[]> {
-    return await this.useRepository.find({ where: { isActive: true } });
+    return await this.useRepository.find({
+      relations: {
+        posts: true,
+      },
+      where: { isActive: true },
+    });
   }
 
   async findOne(id: string): Promise<User> {

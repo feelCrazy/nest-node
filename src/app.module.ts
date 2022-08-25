@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { LoggerMiddleware } from './logger.middleware';
 import { UserModule } from './user/user.module';
 import { PostModule } from './post/post.module';
+import { ReplyModule } from './reply/reply.module';
 const SQL_CONFIG = TypeOrmModule.forRoot({
   type: 'mysql',
   host: 'localhost',
@@ -18,7 +19,7 @@ const SQL_CONFIG = TypeOrmModule.forRoot({
 });
 
 @Module({
-  imports: [SQL_CONFIG, UserModule, PostModule],
+  imports: [SQL_CONFIG, UserModule, PostModule, ReplyModule],
 })
 export class AppModule implements NestModule {
   constructor(private dataSource: DataSource) {}

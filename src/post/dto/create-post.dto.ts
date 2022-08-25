@@ -1,5 +1,6 @@
 import { IsOptional, IsNotEmpty, IsString } from 'class-validator';
 import { UserDTO } from '../../user/dto/user.dto';
+import { ReplyDto } from '../../reply/dto/reply';
 export class CreatePostDto {
   id: string;
 

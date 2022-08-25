@@ -44,6 +44,6 @@ export class User {
   @Column({ nullable: true })
   sex: string;
 
-  @OneToMany(() => Post, (post) => post)
+  @OneToMany(() => Post, (post) => post.user)
   posts: Post[];
 }

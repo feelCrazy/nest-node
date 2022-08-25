@@ -5,8 +5,10 @@ import {
   UpdateDateColumn,
   CreateDateColumn,
   ManyToOne,
+  OneToMany,
 } from 'typeorm';
 import { User } from '../../user/entity/user.entity';
+import { Reply } from '../../reply/entities/reply.entity';
 
 /**
  * post新建主题表
@@ -35,6 +37,9 @@ export class Post {
   @UpdateDateColumn()
   update_time: string;
 
-  @ManyToOne(() => User, (user) => user.id)
+  @ManyToOne(() => User, (user) => user.posts)
   user: User;
+
+  @OneToMany(() => Reply, (reply) => reply.post)
+  reply: Reply[];
 }

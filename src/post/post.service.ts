@@ -18,7 +18,7 @@ export class PostService {
   async findOne(id: string) {
     return await this.postRepository.find({
       relations: {
-        user: true,
+        reply: true,
       },
       where: {
         id,
