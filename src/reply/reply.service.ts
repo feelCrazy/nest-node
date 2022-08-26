@@ -3,10 +3,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { ReplyDto } from './dto/reply';
-import { UpdateReplyDto } from './dto/update-reply.dto';
 
 import { Reply } from './entities/reply.entity';
 import { Post } from '../post/entities/post.entity';
+import { User } from '../user/entity/user.entity';
 
 @Injectable()
 export class ReplyService {
@@ -16,6 +16,9 @@ export class ReplyService {
 
     @InjectRepository(Post)
     private postRepository: Repository<Post>,
+
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
   ) {}
 
   async create(createReplyDto: ReplyDto) {
@@ -25,28 +28,10 @@ export class ReplyService {
 
     createReplyDto.post = post;
     return await this.replyRespository.save(createReplyDto);
-
-    // post.reply_id = reply.id;
-    // post.reply = [reply];
-    // console.log('>>>>>createReplyDto', post);
-    // this.postRepository.save(post);
-
-    // return await this.postRepository.save(post);
   }
 
-  findAll() {
-    return `This action returns all reply`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} reply`;
-  }
-
-  update(id: number, updateReplyDto: UpdateReplyDto) {
-    return `This action updates a #${id} reply`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} reply`;
+  async remove(id: string) {
+    const reply = await this.replyRespository.findOneBy({ id });
+    return await this.replyRespository.remove(reply);
   }
 }

@@ -9,7 +9,6 @@ import {
 } from '@nestjs/common';
 import { ReplyService } from './reply.service';
 import { ReplyDto } from './dto/reply';
-import { UpdateReplyDto } from './dto/update-reply.dto';
 
 @Controller('reply')
 export class ReplyController {
@@ -20,23 +19,8 @@ export class ReplyController {
     return this.replyService.create(createReplyDto);
   }
 
-  @Get()
-  findAll() {
-    return this.replyService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.replyService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateReplyDto: UpdateReplyDto) {
-    return this.replyService.update(+id, updateReplyDto);
-  }
-
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.replyService.remove(+id);
+    return this.replyService.remove(id);
   }
 }
