@@ -6,6 +6,7 @@ import { LoggerMiddleware } from './logger.middleware';
 import { UserModule } from './user/user.module';
 import { PostModule } from './post/post.module';
 import { ReplyModule } from './reply/reply.module';
+import { AuthModule } from './auth/auth.module';
 const SQL_CONFIG = TypeOrmModule.forRoot({
   type: 'mysql',
   host: 'localhost',
@@ -19,7 +20,7 @@ const SQL_CONFIG = TypeOrmModule.forRoot({
 });
 
 @Module({
-  imports: [SQL_CONFIG, UserModule, PostModule, ReplyModule],
+  imports: [SQL_CONFIG, UserModule, PostModule, ReplyModule, AuthModule],
 })
 export class AppModule implements NestModule {
   constructor(private dataSource: DataSource) {}

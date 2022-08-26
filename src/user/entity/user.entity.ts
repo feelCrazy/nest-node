@@ -27,7 +27,7 @@ export class User {
   @Column({ default: true, select: false })
   isActive: boolean;
 
-  @Column({ select: false })
+  @Column()
   password: string;
 
   @Column({

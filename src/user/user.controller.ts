@@ -7,11 +7,15 @@ import {
   HttpStatus,
   Param,
   Req,
+  UseGuards,
 } from '@nestjs/common';
 import { Response, Request } from 'express';
 
 import { UserService } from './user.service';
 import { UserDTO } from './dto/user.dto';
+
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { LocalAuthGuard } from '../auth/guards/local-auth.guard';
 
 @Controller('user')
 export class UserController {
@@ -27,6 +31,7 @@ export class UserController {
     });
   }
 
+  @UseGuards(LocalAuthGuard)
   @Post('create')
   async create(@Res() res: Response, @Body() user: UserDTO): Promise<any> {
     await this.userService.create(user);
@@ -42,13 +47,22 @@ export class UserController {
     return await this.userService.removeOne(id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('findActive')
-  async findActive() {
+  async findActive(@Req() req) {
+    console.log('>>>req', req.user);
     return await this.userService.findActive();
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   async findOne(@Param('id') id) {
     return await this.userService.findOne(id);
+  }
+
+  @Get('findUser')
+  async findUser(@Body() body: { name: string }) {
+    const { name } = body;
+    return await this.userService.findUser(name);
   }
 }
