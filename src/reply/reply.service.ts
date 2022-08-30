@@ -21,12 +21,16 @@ export class ReplyService {
     private userRepository: Repository<User>,
   ) {}
 
-  async create(createReplyDto: ReplyDto) {
+  async create(createReplyDto: ReplyDto, userId: string) {
+    const user = await this.userRepository.findOneBy({ id: userId });
+    console.log('>>>>>', user);
+
     const post = await this.postRepository.findOneBy({
       id: createReplyDto.post_id,
     });
 
     createReplyDto.post = post;
+    createReplyDto.user = user;
     return await this.replyRespository.save(createReplyDto);
   }
 

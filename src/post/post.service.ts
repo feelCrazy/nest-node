@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { CreatePostDto } from './dto/create-post.dto';
 import { Post } from './entities/post.entity';
 import { User } from '../user/entity/user.entity';
-
+import { Reply } from '../reply/entities/reply.entity';
 @Injectable()
 export class PostService {
   constructor(
@@ -18,7 +18,9 @@ export class PostService {
   async findOne(id: string) {
     return await this.postRepository.find({
       relations: {
-        reply: true,
+        reply: {
+          user: true,
+        },
       },
       where: {
         id,
