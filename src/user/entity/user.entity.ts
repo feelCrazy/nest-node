@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 
 import { Post } from '../../post/entities/post.entity';
-
+import { Manuscript } from '../../manuscript/entities/manuscript.entity';
 /**
  * user用户表
  */
@@ -46,4 +46,7 @@ export class User {
 
   @OneToMany(() => Post, (post) => post.user)
   posts: Post[];
+
+  @OneToMany(() => Manuscript, (manuscript) => manuscript.user)
+  manuscript: Manuscript[];
 }
