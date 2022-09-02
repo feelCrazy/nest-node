@@ -12,11 +12,14 @@ export class CreateManuscriptDto {
   @IsString()
   content: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   user_id: string;
 
   @IsOptional()
   status: string;
+
+  @IsOptional()
+  isDelete: boolean;
 
   @IsOptional()
   remark: string;
@@ -28,5 +31,11 @@ export class CreateManuscriptDto {
   update_time: string;
 
   @IsOptional()
-  user: UserDTO;
+  user: {
+    name: string;
+    email: string;
+    id: string;
+    isActive: boolean;
+    sex: string;
+  };
 }

@@ -21,7 +21,14 @@ const SQL_CONFIG = TypeOrmModule.forRoot({
 });
 
 @Module({
-  imports: [SQL_CONFIG, UserModule, PostModule, ReplyModule, AuthModule, ManuscriptModule],
+  imports: [
+    SQL_CONFIG,
+    UserModule,
+    PostModule,
+    ReplyModule,
+    AuthModule,
+    ManuscriptModule,
+  ],
 })
 export class AppModule implements NestModule {
   constructor(private dataSource: DataSource) {}

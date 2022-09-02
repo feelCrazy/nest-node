@@ -7,7 +7,7 @@ import {
   ManyToOne,
 } from 'typeorm';
 import { User } from '../../user/entity/user.entity';
-
+@Entity()
 export class Manuscript {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -18,10 +18,13 @@ export class Manuscript {
   @Column({ nullable: true })
   content: string;
 
-  @Column()
+  @Column({ default: false })
+  isDelete: boolean;
+
+  @Column({ nullable: true })
   status: string;
 
-  @Column()
+  @Column({ nullable: true })
   remark: string;
 
   @CreateDateColumn()

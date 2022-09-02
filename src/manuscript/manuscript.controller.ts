@@ -1,34 +1,44 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  UseGuards,
+  Req,
+} from '@nestjs/common';
 import { ManuscriptService } from './manuscript.service';
 import { CreateManuscriptDto } from './dto/create-manuscript.dto';
 import { UpdateManuscriptDto } from './dto/update-manuscript.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('manuscript')
 export class ManuscriptController {
   constructor(private readonly manuscriptService: ManuscriptService) {}
 
-  @Post()
-  create(@Body() createManuscriptDto: CreateManuscriptDto) {
-    return this.manuscriptService.create(createManuscriptDto);
+  @UseGuards(JwtAuthGuard)
+  @Post('create')
+  create(@Body() createManuscriptDto: CreateManuscriptDto, @Req() req) {
+    const { id } = req.user;
+    return this.manuscriptService.create(
+      { ...createManuscriptDto, user_id: id },
+      id,
+    );
   }
 
-  @Get()
-  findAll() {
-    return this.manuscriptService.findAll();
+  @Post('findAll')
+  findAll(params: { title?: string; status?: string; id?: string }) {
+    return this.manuscriptService.findAll(params);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.manuscriptService.findOne(+id);
+  @Post('update')
+  update(@Body() updateManuscriptDto: UpdateManuscriptDto) {
+    const { id } = updateManuscriptDto;
+    return this.manuscriptService.update(id, updateManuscriptDto);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateManuscriptDto: UpdateManuscriptDto) {
-    return this.manuscriptService.update(+id, updateManuscriptDto);
-  }
-
-  @Delete(':id')
+  @Get('remove')
   remove(@Param('id') id: string) {
-    return this.manuscriptService.remove(+id);
+    return this.manuscriptService.remove(id);
   }
 }

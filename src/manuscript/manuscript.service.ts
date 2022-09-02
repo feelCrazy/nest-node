@@ -1,26 +1,47 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+
 import { CreateManuscriptDto } from './dto/create-manuscript.dto';
 import { UpdateManuscriptDto } from './dto/update-manuscript.dto';
-
+import { Manuscript } from './entities/manuscript.entity';
+import { User } from '../user/entity/user.entity';
 @Injectable()
 export class ManuscriptService {
-  create(createManuscriptDto: CreateManuscriptDto) {
-    return 'This action adds a new manuscript';
+  constructor(
+    @InjectRepository(Manuscript)
+    private manuscriptRepository: Repository<Manuscript>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
+  ) {}
+
+  async findAll(parmas: { title?: string; status?: string; id?: string }) {
+    return await this.manuscriptRepository.find({
+      where: {
+        ...parmas,
+      },
+    });
   }
 
-  findAll() {
-    return `This action returns all manuscript`;
+  async create(createManuscriptDto: CreateManuscriptDto, id: string) {
+    const user = await this.userRepository.findOne({
+      select: ['name', 'email', 'id', 'isActive', 'sex'],
+      where: { id },
+    });
+    createManuscriptDto.user = user;
+    return await this.manuscriptRepository.save(createManuscriptDto);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} manuscript`;
+  async update(id: string, updateManuscriptDto: UpdateManuscriptDto) {
+    const manuscript = await this.manuscriptRepository.findOneBy({ id });
+    manuscript.status = updateManuscriptDto.status;
+    manuscript.remark = updateManuscriptDto.remark;
+    return await this.manuscriptRepository.save(manuscript);
   }
 
-  update(id: number, updateManuscriptDto: UpdateManuscriptDto) {
-    return `This action updates a #${id} manuscript`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} manuscript`;
+  async remove(id: string) {
+    const manuscript = await this.manuscriptRepository.findOneBy({ id });
+    manuscript.isDelete = true;
+    return await this.manuscriptRepository.save(manuscript);
   }
 }
