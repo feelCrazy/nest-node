@@ -16,6 +16,7 @@ async function bootstrap() {
       },
     }),
   );
+  app.setGlobalPrefix('/api');
   app.useGlobalFilters(new HttpExceptionFilter());
   await app.listen(3000);
 }

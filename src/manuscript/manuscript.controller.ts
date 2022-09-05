@@ -27,7 +27,7 @@ export class ManuscriptController {
   }
 
   @Post('findAll')
-  findAll(params: { title?: string; status?: string; id?: string }) {
+  findAll(@Body() params: { title?: string; status?: string; id?: string }) {
     return this.manuscriptService.findAll(params);
   }
 

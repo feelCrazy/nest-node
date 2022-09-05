@@ -21,7 +21,7 @@ export class Manuscript {
   @Column({ default: false })
   isDelete: boolean;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, default: 1 })
   status: string;
 
   @Column({ nullable: true })

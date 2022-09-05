@@ -34,7 +34,11 @@ export class UserService {
     return await this.useRepository.save(user);
   }
 
-  async create(user: IUsers): Promise<IUsers> {
+  async create(user: IUsers) {
+    const use = await this.useRepository.findOneBy({ name: user.name });
+    if (use) {
+      return '';
+    }
     return await this.useRepository.save(user);
   }
 
