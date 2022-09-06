@@ -9,10 +9,8 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async validateUser(username: string, password: string): Promise<any> {
-    console.log('>>>>>>>>username', username);
-
-    const user = await this.usersService.findUser(username);
+  async validateUser(email: string, password: string): Promise<any> {
+    const user = await this.usersService.findUser(email);
     if (!user) {
       throw new BadRequestException('user not found');
     }
@@ -27,7 +25,8 @@ export class AuthService {
   }
 
   async login(user: any) {
-    const payload = { username: user.username, sub: user.id };
+    console.log('login.', user);
+    const payload = { username: user.name, sub: user.id };
     return {
       access_token: this.jwtService.sign(payload),
     };
