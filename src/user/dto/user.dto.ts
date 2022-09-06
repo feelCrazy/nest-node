@@ -24,6 +24,14 @@ export class UserDTO {
   @IsString()
   password: string;
 
+  @IsOptional()
+  @IsString()
+  phone: string;
+
+  @IsOptional()
+  @IsDate()
+  brithday: string;
+
   @IsBoolean()
   @IsOptional()
   isActive: boolean;

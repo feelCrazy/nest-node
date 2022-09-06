@@ -24,6 +24,12 @@ export class User {
   @Column()
   email: string;
 
+  @Column({ length: 20 })
+  phone: string;
+
+  @Column({ type: 'date', nullable: true })
+  brithday: string;
+
   @Column({ default: true, select: false })
   isActive: boolean;
 

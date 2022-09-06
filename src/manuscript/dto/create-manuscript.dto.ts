@@ -12,6 +12,9 @@ export class CreateManuscriptDto {
   @IsString()
   content: string;
 
+  @IsNotEmpty()
+  type: string;
+
   @IsOptional()
   user_id: string;
 

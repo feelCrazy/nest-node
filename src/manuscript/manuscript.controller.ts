@@ -9,7 +9,6 @@ import {
 } from '@nestjs/common';
 import { ManuscriptService } from './manuscript.service';
 import { CreateManuscriptDto } from './dto/create-manuscript.dto';
-import { UpdateManuscriptDto } from './dto/update-manuscript.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('manuscript')
@@ -32,13 +31,22 @@ export class ManuscriptController {
   }
 
   @Post('update')
-  update(@Body() updateManuscriptDto: UpdateManuscriptDto) {
+  update(
+    @Body()
+    updateManuscriptDto: {
+      title?: string;
+      status?: string;
+      id?: string;
+    },
+  ) {
+    console.log('>>>>updateManuscriptDto', updateManuscriptDto);
     const { id } = updateManuscriptDto;
     return this.manuscriptService.update(id, updateManuscriptDto);
   }
 
   @Get('remove')
-  remove(@Param('id') id: string) {
+  remove(@Req() req) {
+    const { id } = req.query;
     return this.manuscriptService.remove(id);
   }
 }

@@ -15,7 +15,7 @@ export class Manuscript {
   @Column()
   title: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: 'longtext' })
   content: string;
 
   @Column({ default: false })

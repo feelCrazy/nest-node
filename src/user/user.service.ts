@@ -42,6 +42,13 @@ export class UserService {
     return await this.useRepository.save(user);
   }
 
+  async update(user: IUsers, id: string) {
+    let use = await this.findOne(id);
+    const { name, email, sex, phone, address, brithday } = user;
+    use = { ...use, name, email, sex, phone, address, brithday };
+    await this.useRepository.save(use);
+  }
+
   async findUser(name: string): Promise<User> {
     return await this.useRepository.findOneBy({ name });
   }

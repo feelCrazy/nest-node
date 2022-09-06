@@ -8,4 +8,6 @@ export interface IUsers {
   readonly isActive: boolean;
   readonly time: string;
   readonly update_time: string;
+  readonly phone: string;
+  readonly brithday: string;
 }

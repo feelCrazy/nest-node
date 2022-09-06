@@ -19,6 +19,7 @@ export class ManuscriptService {
     return await this.manuscriptRepository.find({
       where: {
         ...parmas,
+        isDelete: false,
       },
     });
   }

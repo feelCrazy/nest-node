@@ -55,14 +55,19 @@ export class UserController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get(':id')
-  async findOne(@Param('id') id) {
-    return await this.userService.findOne(id);
+  @Post('update')
+  async update(@Req() req, @Body() user) {
+    console.log('>>>req', req.user);
+    console.log('====', user);
+
+    const { id } = req.user;
+    return await this.userService.update(user, id);
   }
 
-  @Get('findUser')
-  async findUser(@Body() body: { name: string }) {
-    const { name } = body;
-    return await this.userService.findUser(name);
+  @UseGuards(JwtAuthGuard)
+  @Get('getUser')
+  async getUser(@Req() req) {
+    const { id } = req.user;
+    return await this.userService.findOne(id);
   }
 }
