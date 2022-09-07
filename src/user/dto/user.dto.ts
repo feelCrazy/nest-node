@@ -36,6 +36,10 @@ export class UserDTO {
   @IsOptional()
   isActive: boolean;
 
+  @IsBoolean()
+  @IsOptional()
+  isAdmin: boolean;
+
   @IsString()
   @IsOptional()
   address: string;

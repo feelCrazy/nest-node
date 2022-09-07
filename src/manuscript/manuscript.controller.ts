@@ -17,21 +17,23 @@ export class ManuscriptController {
 
   @UseGuards(JwtAuthGuard)
   @Post('create')
-  create(@Body() createManuscriptDto: CreateManuscriptDto, @Req() req) {
+  async create(@Body() createManuscriptDto: CreateManuscriptDto, @Req() req) {
     const { id } = req.user;
-    return this.manuscriptService.create(
+    return await this.manuscriptService.create(
       { ...createManuscriptDto, user_id: id },
       id,
     );
   }
 
   @Post('findAll')
-  findAll(@Body() params: { title?: string; status?: string; id?: string }) {
-    return this.manuscriptService.findAll(params);
+  async findAll(
+    @Body() params: { title?: string; status?: string; id?: string },
+  ) {
+    return await this.manuscriptService.findAll(params);
   }
 
   @Post('update')
-  update(
+  async update(
     @Body()
     updateManuscriptDto: {
       title?: string;
@@ -41,12 +43,16 @@ export class ManuscriptController {
   ) {
     console.log('>>>>updateManuscriptDto', updateManuscriptDto);
     const { id } = updateManuscriptDto;
-    return this.manuscriptService.update(id, updateManuscriptDto);
+    return await this.manuscriptService.update(id, updateManuscriptDto);
   }
 
   @Get('remove')
-  remove(@Req() req) {
+  async remove(@Req() req) {
     const { id } = req.query;
-    return this.manuscriptService.remove(id);
+    return await this.manuscriptService.remove(id);
+  }
+  @Get('getDetial')
+  async getDetial(@Body() parmas) {
+    return await this.manuscriptService.getDetial(parmas.id);
   }
 }

@@ -35,7 +35,7 @@ export class UserService {
   }
 
   async create(user: IUsers) {
-    const use = await this.useRepository.findOneBy({ name: user.name });
+    const use = await this.useRepository.findOneBy({ email: user.email });
     if (use) {
       return '';
     }
@@ -51,5 +51,19 @@ export class UserService {
 
   async findUser(email: string): Promise<User> {
     return await this.useRepository.findOneBy({ email });
+  }
+
+  async updatePassword(
+    id: string,
+    param: { oldPassword: string; newPassword: string },
+  ) {
+    const user = await this.useRepository.findOneBy({ id });
+    if (param.oldPassword === user.password) {
+      user.password = param.newPassword;
+      await this.useRepository.save(user);
+      return '修改成功';
+    } else {
+      return null;
+    }
   }
 }

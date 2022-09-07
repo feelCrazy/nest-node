@@ -29,6 +29,8 @@ export class AuthService {
     const payload = { username: user.name, sub: user.id };
     return {
       access_token: this.jwtService.sign(payload),
+      username: user.name,
+      isAdmin: user.isAdmin,
     };
   }
 
@@ -38,7 +40,7 @@ export class AuthService {
       const user = await this.usersService.findUser(userDto.name);
       return await this.login({ username: user.name, password: user.password });
     } else {
-      return '用户名已存在';
+      return '用户已存在';
     }
   }
 }

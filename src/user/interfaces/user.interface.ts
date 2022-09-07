@@ -10,4 +10,5 @@ export interface IUsers {
   readonly update_time: string;
   readonly phone: string;
   readonly brithday: string;
+  readonly isAdmin: boolean;
 }

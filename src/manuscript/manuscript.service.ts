@@ -45,4 +45,8 @@ export class ManuscriptService {
     manuscript.isDelete = true;
     return await this.manuscriptRepository.save(manuscript);
   }
+
+  async getDetial(id: string) {
+    return this.manuscriptRepository.findOneBy({ id });
+  }
 }

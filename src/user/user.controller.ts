@@ -5,7 +5,6 @@ import {
   Res,
   Body,
   HttpStatus,
-  Param,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -57,9 +56,6 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @Post('update')
   async update(@Req() req, @Body() user) {
-    console.log('>>>req', req.user);
-    console.log('====', user);
-
     const { id } = req.user;
     return await this.userService.update(user, id);
   }
@@ -69,5 +65,25 @@ export class UserController {
   async getUser(@Req() req) {
     const { id } = req.user;
     return await this.userService.findOne(id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('updatePassword')
+  async updatePassword(@Req() req, @Body() data, @Res() res: Response) {
+    const { id } = req.user;
+    const user = await this.userService.updatePassword(id, data);
+    if (user) {
+      return res.status(HttpStatus.OK).json({
+        message: user,
+        data: data,
+        status: 200,
+      });
+    } else {
+      return res.status(HttpStatus.OK).json({
+        message: '旧密码错误',
+        data: data,
+        status: 400,
+      });
+    }
   }
 }
