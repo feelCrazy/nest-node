@@ -27,7 +27,13 @@ export class ManuscriptController {
 
   @Post('findAll')
   async findAll(
-    @Body() params: { title?: string; status?: string; id?: string },
+    @Body()
+    params: {
+      title?: string;
+      status?: string;
+      id?: string;
+      name?: string;
+    },
   ) {
     return await this.manuscriptService.findAll(params);
   }
@@ -41,7 +47,6 @@ export class ManuscriptController {
       id?: string;
     },
   ) {
-    console.log('>>>>updateManuscriptDto', updateManuscriptDto);
     const { id } = updateManuscriptDto;
     return await this.manuscriptService.update(id, updateManuscriptDto);
   }
@@ -52,7 +57,8 @@ export class ManuscriptController {
     return await this.manuscriptService.remove(id);
   }
   @Get('getDetial')
-  async getDetial(@Body() parmas) {
-    return await this.manuscriptService.getDetial(parmas.id);
+  async getDetial(@Req() req) {
+    const { id } = req.query;
+    return await this.manuscriptService.getDetial(id);
   }
 }

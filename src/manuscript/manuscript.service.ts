@@ -15,11 +15,24 @@ export class ManuscriptService {
     private userRepository: Repository<User>,
   ) {}
 
-  async findAll(parmas: { title?: string; status?: string; id?: string }) {
+  async findAll(parmas: {
+    title?: string;
+    status?: string;
+    id?: string;
+    name?: string;
+  }) {
+    const { name, ...result } = parmas;
+
     return await this.manuscriptRepository.find({
+      relations: {
+        user: true,
+      },
       where: {
-        ...parmas,
+        ...result,
         isDelete: false,
+        user: {
+          name: name,
+        },
       },
     });
   }
@@ -47,6 +60,8 @@ export class ManuscriptService {
   }
 
   async getDetial(id: string) {
+    console.log('>>>>', id);
+
     return this.manuscriptRepository.findOneBy({ id });
   }
 }
