@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Param,
-  UseGuards,
-  Req,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards, Req } from '@nestjs/common';
 import { ManuscriptService } from './manuscript.service';
 import { CreateManuscriptDto } from './dto/create-manuscript.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -33,9 +25,14 @@ export class ManuscriptController {
       status?: string;
       id?: string;
       name?: string;
+      page: {
+        pageNum?: number;
+        pageSize?: number;
+      };
     },
   ) {
-    return await this.manuscriptService.findAll(params);
+    const { page, ...res } = params;
+    return await this.manuscriptService.findAll(res, page);
   }
 
   @Post('update')

@@ -15,15 +15,22 @@ export class ManuscriptService {
     private userRepository: Repository<User>,
   ) {}
 
-  async findAll(parmas: {
-    title?: string;
-    status?: string;
-    id?: string;
-    name?: string;
-  }) {
+  async findAll(
+    parmas: {
+      title?: string;
+      status?: string;
+      id?: string;
+      name?: string;
+    },
+    page: {
+      pageNum?: number;
+      pageSize?: number;
+    },
+  ) {
     const { name, ...result } = parmas;
-
-    return await this.manuscriptRepository.find({
+    const skip = page.pageNum - 1 || 0;
+    const take = page.pageSize || 10;
+    const [data, count] = await this.manuscriptRepository.findAndCount({
       relations: {
         user: true,
       },
@@ -34,7 +41,13 @@ export class ManuscriptService {
           name: name,
         },
       },
+      skip,
+      take,
     });
+    return {
+      data,
+      count,
+    };
   }
 
   async create(createManuscriptDto: CreateManuscriptDto, id: string) {
