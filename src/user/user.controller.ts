@@ -14,7 +14,6 @@ import { UserService } from './user.service';
 import { UserDTO } from './dto/user.dto';
 
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { LocalAuthGuard } from '../auth/guards/local-auth.guard';
 
 @Controller('user')
 export class UserController {
@@ -30,14 +29,21 @@ export class UserController {
     });
   }
 
-  @UseGuards(LocalAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Post('create')
   async create(@Res() res: Response, @Body() user: UserDTO): Promise<any> {
-    await this.userService.create(user);
-    return res.status(HttpStatus.OK).json({
-      message: 'User Updated successfully!',
-      status: 200,
-    });
+    const use = await this.userService.create(user);
+    if (use) {
+      return res.status(HttpStatus.OK).json({
+        message: '添加成功!',
+        status: 200,
+      });
+    } else {
+      return res.status(HttpStatus.OK).json({
+        message: '用户名已存在!',
+        status: 400,
+      });
+    }
   }
 
   @Get('remove')
@@ -47,10 +53,22 @@ export class UserController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('findActive')
-  async findActive(@Req() req) {
-    console.log('>>>req', req.user);
-    return await this.userService.findActive();
+  @Post('findActive')
+  async findActive(
+    @Body()
+    params: {
+      name?: string;
+      isAdmin?: boolean;
+      page: {
+        pageNum?: number;
+        pageSize?: number;
+      };
+    },
+
+    @Req() req,
+  ) {
+    const { page, ...res } = params;
+    return await this.userService.findActive(res, page);
   }
 
   @UseGuards(JwtAuthGuard)

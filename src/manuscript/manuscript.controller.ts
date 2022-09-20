@@ -16,7 +16,7 @@ export class ManuscriptController {
       id,
     );
   }
-
+  @UseGuards(JwtAuthGuard)
   @Post('findAll')
   async findAll(
     @Body()
@@ -29,10 +29,17 @@ export class ManuscriptController {
         pageNum?: number;
         pageSize?: number;
       };
+      isAudit?: boolean;
     },
+    @Req() req,
   ) {
-    const { page, ...res } = params;
-    return await this.manuscriptService.findAll(res, page);
+    const { id } = req.user;
+    const { page, isAudit, ...res } = params;
+    const data = { ...res };
+    if (!isAudit) {
+      data['user_id'] = id;
+    }
+    return await this.manuscriptService.findAll(data, page);
   }
 
   @Post('update')

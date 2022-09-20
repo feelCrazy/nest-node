@@ -15,13 +15,33 @@ export class UserService {
     return await this.useRepository.find();
   }
 
-  async findActive(): Promise<IUsers[]> {
-    return await this.useRepository.find({
+  async findActive(
+    parmas: {
+      name?: string;
+      isAdmin?: boolean;
+    },
+    page: {
+      pageNum?: number;
+      pageSize?: number;
+    },
+  ) {
+    const skip = page.pageNum - 1 || 0;
+    const take = page.pageSize || 10;
+    const [data, count] = await this.useRepository.findAndCount({
       relations: {
         posts: true,
       },
-      where: { isActive: true },
+      where: { isActive: true, name: parmas.name, isAdmin: parmas.isAdmin },
+      order: {
+        time: 'DESC',
+      },
+      skip,
+      take,
     });
+    return {
+      data,
+      count,
+    };
   }
 
   async findOne(id: string): Promise<User> {
@@ -37,7 +57,7 @@ export class UserService {
   async create(user: IUsers) {
     const use = await this.useRepository.findOneBy({ email: user.email });
     if (use) {
-      return '';
+      return null;
     }
     return await this.useRepository.save(user);
   }

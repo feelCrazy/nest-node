@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, Like } from 'typeorm';
 
 import { CreateManuscriptDto } from './dto/create-manuscript.dto';
 import { UpdateManuscriptDto } from './dto/update-manuscript.dto';
@@ -22,13 +22,14 @@ export class ManuscriptService {
       id?: string;
       name?: string;
       reviewer_id?: string;
+      user_id?: string;
     },
     page: {
       pageNum?: number;
       pageSize?: number;
     },
   ) {
-    const { name, ...result } = parmas;
+    const { name, user_id, title, ...result } = parmas;
     const skip = page.pageNum - 1 || 0;
     const take = page.pageSize || 10;
     const [data, count] = await this.manuscriptRepository.findAndCount({
@@ -38,9 +39,14 @@ export class ManuscriptService {
       where: {
         ...result,
         isDelete: false,
+        title: title ? Like(`%${title}%`) : undefined,
         user: {
           name: name,
+          id: user_id,
         },
+      },
+      order: {
+        time: 'DESC',
       },
       skip,
       take,
