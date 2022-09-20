@@ -58,4 +58,48 @@ export class ManuscriptController {
     const { id } = req.query;
     return await this.manuscriptService.getDetial(id);
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('auditUpdate')
+  async audit(
+    @Body()
+    updateManuscriptDto: {
+      id: string;
+      status: string;
+      remark: string;
+    },
+    @Req() req,
+  ) {
+    const { id } = req.user;
+    return await this.manuscriptService.audit(
+      updateManuscriptDto.id,
+      updateManuscriptDto,
+      id,
+    );
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('findMyAuditList')
+  async findMyAuditList(
+    @Body()
+    params: {
+      title?: string;
+      status?: string;
+      id?: string;
+      name?: string;
+      page: {
+        pageNum?: number;
+        pageSize?: number;
+      };
+    },
+    @Req() req,
+  ) {
+    const { id } = req.user;
+    const { page, ...res } = params;
+
+    return await this.manuscriptService.findAll(
+      { ...res, reviewer_id: id },
+      page,
+    );
+  }
 }

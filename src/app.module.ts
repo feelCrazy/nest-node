@@ -8,6 +8,7 @@ import { PostModule } from './post/post.module';
 import { ReplyModule } from './reply/reply.module';
 import { AuthModule } from './auth/auth.module';
 import { ManuscriptModule } from './manuscript/manuscript.module';
+import { SectionModule } from './section/section.module';
 const SQL_CONFIG = TypeOrmModule.forRoot({
   type: 'mysql',
   host: 'localhost',
@@ -28,6 +29,7 @@ const SQL_CONFIG = TypeOrmModule.forRoot({
     ReplyModule,
     AuthModule,
     ManuscriptModule,
+    SectionModule,
   ],
 })
 export class AppModule implements NestModule {

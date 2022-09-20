@@ -21,11 +21,17 @@ export class Manuscript {
   @Column({ default: false })
   isDelete: boolean;
 
+  @Column()
+  type: string;
+
   @Column({ nullable: true, default: 1 })
   status: string;
 
   @Column({ nullable: true })
   remark: string;
+
+  @Column({ nullable: true })
+  reviewer_id: string;
 
   @CreateDateColumn()
   time: string;

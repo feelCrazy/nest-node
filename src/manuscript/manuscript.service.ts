@@ -21,6 +21,7 @@ export class ManuscriptService {
       status?: string;
       id?: string;
       name?: string;
+      reviewer_id?: string;
     },
     page: {
       pageNum?: number;
@@ -61,8 +62,10 @@ export class ManuscriptService {
 
   async update(id: string, updateManuscriptDto: UpdateManuscriptDto) {
     const manuscript = await this.manuscriptRepository.findOneBy({ id });
-    manuscript.status = updateManuscriptDto.status;
-    manuscript.remark = updateManuscriptDto.remark;
+    manuscript.status = updateManuscriptDto.status || manuscript.status;
+    manuscript.remark = updateManuscriptDto.remark || manuscript.remark;
+    manuscript.content = updateManuscriptDto.content || manuscript.content;
+    manuscript.title = updateManuscriptDto.title || manuscript.title;
     return await this.manuscriptRepository.save(manuscript);
   }
 
@@ -72,9 +75,20 @@ export class ManuscriptService {
     return await this.manuscriptRepository.save(manuscript);
   }
 
-  async getDetial(id: string) {
-    console.log('>>>>', id);
+  // 审核
+  async audit(
+    id: string,
+    updateManuscriptDto: UpdateManuscriptDto,
+    audit_id: string,
+  ) {
+    const manuscript = await this.manuscriptRepository.findOneBy({ id });
+    manuscript.status = updateManuscriptDto.status;
+    manuscript.remark = updateManuscriptDto.remark;
+    manuscript.reviewer_id = audit_id;
+    return await this.manuscriptRepository.save(manuscript);
+  }
 
+  async getDetial(id: string) {
     return this.manuscriptRepository.findOneBy({ id });
   }
 }
