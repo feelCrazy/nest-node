@@ -30,8 +30,9 @@ export class ManuscriptService {
     },
   ) {
     const { name, user_id, title, ...result } = parmas;
-    const skip = page.pageNum - 1 || 0;
+    const limit = page.pageNum - 1 || 0;
     const take = page.pageSize || 10;
+    const skip = limit * take;
     const [data, count] = await this.manuscriptRepository.findAndCount({
       relations: {
         user: true,

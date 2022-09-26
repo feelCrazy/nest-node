@@ -109,4 +109,23 @@ export class ManuscriptController {
       page,
     );
   }
+
+  @Post('findAllList')
+  async findAllList(
+    @Body()
+    params: {
+      title?: string;
+      status?: string;
+      id?: string;
+      name?: string;
+      page: {
+        pageNum?: number;
+        pageSize?: number;
+      };
+    },
+  ) {
+    const { page, ...res } = params;
+
+    return await this.manuscriptService.findAll(res, page);
+  }
 }

@@ -25,8 +25,9 @@ export class UserService {
       pageSize?: number;
     },
   ) {
-    const skip = page.pageNum - 1 || 0;
+    const limit = page.pageNum - 1 || 0;
     const take = page.pageSize || 10;
+    const skip = limit * take;
     const [data, count] = await this.useRepository.findAndCount({
       relations: {
         posts: true,
@@ -64,8 +65,8 @@ export class UserService {
 
   async update(user: IUsers, id: string) {
     let use = await this.findOne(id);
-    const { name, email, sex, phone, address, brithday } = user;
-    use = { ...use, name, email, sex, phone, address, brithday };
+    const { name, email, sex, phone, address, brithday, isActive } = user;
+    use = { ...use, name, email, sex, phone, address, brithday, isActive };
     await this.useRepository.save(use);
   }
 

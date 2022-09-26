@@ -29,7 +29,7 @@ export class UserController {
     });
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Post('create')
   async create(@Res() res: Response, @Body() user: UserDTO): Promise<any> {
     const use = await this.userService.create(user);
@@ -46,13 +46,13 @@ export class UserController {
     }
   }
 
-  @Get('remove')
-  async removeOne(@Req() req: Request) {
-    const id = req.query.id as string;
-    return await this.userService.removeOne(id);
+  @Post('remove')
+  async removeOne(@Body() user) {
+    const { id } = user;
+    return await this.userService.update(user, id);
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Post('findActive')
   async findActive(
     @Body()
